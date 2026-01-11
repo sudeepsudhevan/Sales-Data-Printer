@@ -1,0 +1,39 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(ctx, {
+            type: 'bar', // You can change to 'line' if preferred
+            data: {
+                labels: {{ chart_labels| safe }},
+        datasets: [{
+            label: 'Money Received',
+            data: {{ chart_received| safe }},
+        backgroundColor: 'rgba(25, 135, 84, 0.7)', // Bootstrap Success Color
+        borderColor: 'rgba(25, 135, 84, 1)',
+        borderWidth: 1
+                }, {
+            label: 'Items Sold',
+            data: {{ chart_sold| safe }},
+        backgroundColor: 'rgba(13, 202, 240, 0.7)', // Bootstrap Info Color
+        borderColor: 'rgba(13, 202, 240, 1)',
+        borderWidth: 1
+                }]
+            },
+        options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function (value) { return 'Rs. ' + value; }
+                }
+            }
+        },
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+    }
+        });
+    });
+</script>

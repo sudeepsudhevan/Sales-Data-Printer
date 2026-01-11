@@ -1,12 +1,55 @@
 {% extends 'sales/base.html' %}
 
 {% block content %}
-<div class="jumbotron text-center mt-5">
-    <h1 class="display-4">Welcome to Sales Data Printer</h1>
-    <p class="lead">Manage your sales records separate by "Money Received" and "Items Sold".</p>
-    <hr class="my-4">
-    <p>Select a section to get started.</p>
-    <a class="btn btn-success btn-lg mx-2" href="{% url 'money_received' %}" role="button">Money Received</a>
-    <a class="btn btn-info btn-lg mx-2" href="{% url 'item_sold' %}" role="button">Item Sold</a>
+<div class="container-fluid">
+    <h1 class="mt-4">Dashboard</h1>
+    <p class="lead text-muted">Sales and Money Received Overview</p>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card text-white bg-success shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Total Money Received</h5>
+                    <h2 class="card-text">Rs. {{ total_received|floatformat:2 }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a href="{% url 'money_received' %}" class="text-white stretched-link">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card text-white bg-info shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sales (Items Sold)</h5>
+                    <h2 class="card-text">Rs. {{ total_sold|floatformat:2 }}</h2>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a href="{% url 'item_sold' %}" class="text-white stretched-link">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                    Daily Overview: Sales vs Received
+                </div>
+                <div class="card-body">
+                    <canvas id="salesChart" width="100%" height="40"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% include 'sales/chart_script.html' %}
 {% endblock %}
