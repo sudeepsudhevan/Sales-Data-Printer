@@ -14,12 +14,9 @@ def index(request):
     # Summary Cards
     total_received = MoneyReceived.objects.aggregate(Sum('amount'))['amount__sum'] or 0
     total_sold = ItemSold.objects.aggregate(Sum('total'))['total__sum'] or 0
-    balance = total_received  # Assuming balance is just what's received, or if user wants diff: calculate diff
-    # Let's show Received, Sold, and maybe a difference if it makes sense, but user asked for "Money Recieved" and "Sales" analysis.
+    balance = total_sold - total_received
     
     # Chart Data - Aggregate by Date
-    # We need a unified list of dates and values for both.
-    
     daily_received = MoneyReceived.objects.values('date').annotate(total=Sum('amount')).order_by('date')
     daily_sold = ItemSold.objects.values('date').annotate(total=Sum('total')).order_by('date')
     
@@ -46,6 +43,7 @@ def index(request):
     context = {
         'total_received': total_received,
         'total_sold': total_sold,
+        'balance': balance,
         'chart_labels': json.dumps(chart_labels, cls=DjangoJSONEncoder),
         'chart_received': json.dumps(chart_received, cls=DjangoJSONEncoder),
         'chart_sold': json.dumps(chart_sold, cls=DjangoJSONEncoder),
@@ -104,12 +102,14 @@ def pdf_report(request):
     
     total_money = money_entries.aggregate(Sum('amount'))['amount__sum'] or 0
     total_sales = item_entries.aggregate(Sum('total'))['total__sum'] or 0
+    balance = total_sales - total_money
     
     html_string = render_to_string('sales/pdf_report.html', {
         'money_entries': money_entries,
         'item_entries': item_entries,
         'total_money': total_money,
         'total_sales': total_sales,
+        'balance': balance,
         'date': datetime.date.today()
     })
     

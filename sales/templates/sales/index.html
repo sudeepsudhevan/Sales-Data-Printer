@@ -7,7 +7,7 @@
 
     <!-- Summary Cards -->
     <div class="row mb-4">
-        <div class="col-md-6 mb-3">
+        <div class="col-md-4 mb-3">
             <div class="card text-white bg-success shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title">Total Money Received</h5>
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-4 mb-3">
             <div class="card text-white bg-info shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title">Total Sales (Items Sold)</h5>
@@ -28,6 +28,18 @@
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a href="{% url 'item_sold' %}" class="text-white stretched-link">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white {% if balance > 0 %}bg-warning{% else %}bg-secondary{% endif %} shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Balance Due</h5>
+                    <h2 class="card-text">Rs. {{ balance|floatformat:2 }}</h2>
+                    <small class="text-white-50">Total Sales - Total Received</small>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <span class="text-white small">{% if balance > 0 %}Pending{% else %}Settled{% endif %}</span>
                 </div>
             </div>
         </div>

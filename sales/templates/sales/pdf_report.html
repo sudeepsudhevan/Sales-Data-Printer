@@ -103,6 +103,25 @@
             </tr>
         </tbody>
     </table>
+
+    <br>
+    <hr><br>
+
+    <h3>Net Balance Summary</h3>
+    <table class="table" style="width: 50%;">
+        <tr>
+            <th>Total Sales</th>
+            <td>Rs. {{ total_sales|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <th>Total Money Received</th>
+            <td>Rs. {{ total_money|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <th>Balance Due</th>
+            <td><strong>Rs. {{ balance|floatformat:2 }}</strong></td>
+        </tr>
+    </table>
 </body>
 
 </html>
