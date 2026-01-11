@@ -27,7 +27,7 @@
     </div>
     <div class="col-md-8">
         <h3>Item Sold Records</h3>
-        <div class="total-box mb-3 text-info">Total Sales: ₹ {{ total_sold }}</div>
+        <div class="total-box mb-3 text-info">Total Sales: Rs. {{ total_sold|floatformat:2 }}</div>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -45,8 +45,8 @@
                     <td>{{ item.id }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.weight }}</td>
-                    <td>₹ {{ item.price }}</td>
-                    <td>₹ {{ item.total }}</td>
+                    <td>Rs. {{ item.price|floatformat:2 }}</td>
+                    <td>Rs. {{ item.total|floatformat:2 }}</td>
                     <td>
                         <a href="{% url 'delete_item' item.pk %}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Are you sure?')">Delete</a>

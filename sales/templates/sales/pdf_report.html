@@ -62,12 +62,12 @@
             <tr>
                 <td>{{ entry.id }}</td>
                 <td>{{ entry.date }}</td>
-                <td>Rs. {{ entry.amount }}</td>
+                <td>Rs. {{ entry.amount|floatformat:2 }}</td>
             </tr>
             {% endfor %}
             <tr class="total-row">
                 <td colspan="2" style="text-align: right;">Total:</td>
-                <td>Rs. {{ total_money }}</td>
+                <td>Rs. {{ total_money|floatformat:2 }}</td>
             </tr>
         </tbody>
     </table>
@@ -93,13 +93,13 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.date }}</td>
                 <td>{{ item.weight }}</td>
-                <td>Rs. {{ item.price }}</td>
-                <td>Rs. {{ item.total }}</td>
+                <td>Rs. {{ item.price|floatformat:2 }}</td>
+                <td>Rs. {{ item.total|floatformat:2 }}</td>
             </tr>
             {% endfor %}
             <tr class="total-row">
                 <td colspan="4" style="text-align: right;">Total:</td>
-                <td>Rs. {{ total_sales }}</td>
+                <td>Rs. {{ total_sales|floatformat:2 }}</td>
             </tr>
         </tbody>
     </table>
