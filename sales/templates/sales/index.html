@@ -1,0 +1,12 @@
+{% extends 'sales/base.html' %}
+
+{% block content %}
+<div class="jumbotron text-center mt-5">
+    <h1 class="display-4">Welcome to Sales Data Printer</h1>
+    <p class="lead">Manage your sales records separate by "Money Received" and "Items Sold".</p>
+    <hr class="my-4">
+    <p>Select a section to get started.</p>
+    <a class="btn btn-success btn-lg mx-2" href="{% url 'money_received' %}" role="button">Money Received</a>
+    <a class="btn btn-info btn-lg mx-2" href="{% url 'item_sold' %}" role="button">Item Sold</a>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'sales/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">Add Money Received</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.date.label_tag }}
+                        {{ form.date }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.amount.label_tag }}
+                        {{ form.amount }}
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Add Entry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Money Received Records</h3>
+        <div class="total-box mb-3 text-success">Total Amount: ₹ {{ total_received }}</div>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Money Received</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.id }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>₹ {{ entry.amount }}</td>
+                    <td>
+                        <a href="{% url 'delete_money' entry.pk %}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

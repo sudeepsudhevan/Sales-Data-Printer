@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sales Report</h1>
+    <p>Date: {{ date }}</p>
+
+    <!-- Money Received Section -->
+    <h2>Money Received</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Money Received</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in money_entries %}
+            <tr>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.date }}</td>
+                <td>Rs. {{ entry.amount }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="2" style="text-align: right;">Total:</td>
+                <td>Rs. {{ total_money }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <hr><br>
+
+    <!-- Item Sold Section -->
+    <h2>Items Sold</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Weight (kg)</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in item_entries %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.weight }}</td>
+                <td>Rs. {{ item.price }}</td>
+                <td>Rs. {{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="4" style="text-align: right;">Total:</td>
+                <td>Rs. {{ total_sales }}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
