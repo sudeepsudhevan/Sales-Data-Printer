@@ -7,7 +7,7 @@ class MoneyReceivedForm(forms.ModelForm):
         fields = ['date', 'amount']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.001'}),
         }
 
 class ItemSoldForm(forms.ModelForm):
@@ -16,6 +16,6 @@ class ItemSoldForm(forms.ModelForm):
         fields = ['date', 'weight', 'price']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.001'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
