@@ -23,6 +23,28 @@
     </div>
     <div class="col-md-8">
         <h3>Money Received Records</h3>
+        <!-- Filter Form -->
+        <div class="card mb-3">
+            <div class="card-body py-3">
+                <form method="get" class="row g-2">
+                    <div class="col-md-3">
+                        {{ filter_form.start_date }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ filter_form.end_date }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.min_amount }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.max_amount }}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="total-box mb-3 text-success">Total Amount: Rs. {{ total_received|floatformat:2 }}</div>
         <table class="table table-striped table-hover">
             <thead>

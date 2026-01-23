@@ -27,6 +27,36 @@
     </div>
     <div class="col-md-8">
         <h3>Item Sold Records</h3>
+        <!-- Filter Form -->
+        <div class="card mb-3">
+            <div class="card-body py-3">
+                <form method="get" class="row g-2">
+                    <div class="col-md-2">
+                        {{ filter_form.start_date }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.end_date }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.min_amount }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.max_amount }}
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="form-check small">
+                            {{ filter_form.due_15_days }}
+                            <label class="form-check-label" for="{{ filter_form.due_15_days.id_for_label }}">
+                                Due > 15
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="total-box mb-3 text-info">Total Sales: Rs. {{ total_sold|floatformat:2 }}</div>
         <table class="table table-striped table-hover">
             <thead>
