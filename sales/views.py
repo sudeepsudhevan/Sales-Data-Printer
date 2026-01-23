@@ -19,6 +19,8 @@ def index(request):
     sold_qs = ItemSold.objects.all()
     
     filtered_items = None
+    filtered_total = 0
+    filtered_balance = 0
     
     if filter_form.is_valid():
         start_date = filter_form.cleaned_data.get('start_date')
