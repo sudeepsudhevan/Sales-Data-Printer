@@ -12,7 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 def index(request):
     # Filter Form
-    filter_form = FilterForm(request.GET)
+    filter_form = FilterForm(request.GET or None)
     
     # Base QuerySets (for charts and summary)
     money_qs = MoneyReceived.objects.all()
@@ -27,7 +27,7 @@ def index(request):
         end_date = filter_form.cleaned_data.get('end_date')
         min_amount = filter_form.cleaned_data.get('min_amount')
         max_amount = filter_form.cleaned_data.get('max_amount')
-        due_15_days = filter_form.cleaned_data.get('due_15_days')
+        due_days = filter_form.cleaned_data.get('due_days')
         
         # Apply filters to Base QS
         if start_date:
@@ -45,9 +45,9 @@ def index(request):
             money_qs = money_qs.filter(amount__lte=max_amount)
             sold_qs = sold_qs.filter(total__lte=max_amount)
             
-        # Specific Logic for "Due > 15 Days" -> Filter Items Sold older than 15 days
-        if due_15_days:
-            cutoff_date = datetime.date.today() - datetime.timedelta(days=15)
+        # Specific Logic for "Due > X Days" -> Filter Items Sold older than X days
+        if due_days:
+            cutoff_date = datetime.date.today() - datetime.timedelta(days=due_days)
             # If checked, we specifically want to SHOW these items in a list
             filtered_items = sold_qs.filter(date__lte=cutoff_date).order_by('date')
             filtered_total = filtered_items.aggregate(Sum('total'))['total__sum'] or 0
@@ -112,7 +112,7 @@ def money_received(request):
     entries = MoneyReceived.objects.all().order_by('-date')
     
     # Filter
-    filter_form = FilterForm(request.GET)
+    filter_form = FilterForm(request.GET or None)
     if filter_form.is_valid():
         start_date = filter_form.cleaned_data.get('start_date')
         end_date = filter_form.cleaned_data.get('end_date')
@@ -149,14 +149,14 @@ def item_sold(request):
     items = ItemSold.objects.all().order_by('-date')
     
     # Filter
-    filter_form = FilterForm(request.GET)
+    filter_form = FilterForm(request.GET or None)
     if filter_form.is_valid():
         start_date = filter_form.cleaned_data.get('start_date')
         end_date = filter_form.cleaned_data.get('end_date')
         min_amount = filter_form.cleaned_data.get('min_amount')
         max_amount = filter_form.cleaned_data.get('max_amount')
-        # We also support due_15_days here if user wants to see it on generic list
-        due_15_days = filter_form.cleaned_data.get('due_15_days')
+        # We also support due_days here if user wants to see it on generic list
+        due_days = filter_form.cleaned_data.get('due_days')
 
         if start_date:
             items = items.filter(date__gte=start_date)
@@ -167,8 +167,8 @@ def item_sold(request):
         if max_amount:
             items = items.filter(total__lte=max_amount)
             
-        if due_15_days:
-            cutoff_date = datetime.date.today() - datetime.timedelta(days=15)
+        if due_days:
+            cutoff_date = datetime.date.today() - datetime.timedelta(days=due_days)
             items = items.filter(date__lte=cutoff_date)
     
     total_sold = items.aggregate(Sum('total'))['total__sum'] or 0

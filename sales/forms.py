@@ -25,4 +25,4 @@ class FilterForm(forms.Form):
     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'End Date'}))
     min_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Min Amount'}))
     max_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Amount'}))
-    due_15_days = forms.BooleanField(required=False, label="Show Due > 15 Days (Sold > 15 days ago)", widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    due_days = forms.IntegerField(required=False, initial=15, label="Due Days (> X Days)", widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Days'}))

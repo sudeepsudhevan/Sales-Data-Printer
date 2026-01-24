@@ -44,11 +44,9 @@
                         {{ filter_form.max_amount }}
                     </div>
                     <div class="col-md-2 d-flex align-items-center">
-                        <div class="form-check small">
-                            {{ filter_form.due_15_days }}
-                            <label class="form-check-label" for="{{ filter_form.due_15_days.id_for_label }}">
-                                Due > 15
-                            </label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Due ></span>
+                            {{ filter_form.due_days }}
                         </div>
                     </div>
                     <div class="col-md-2">

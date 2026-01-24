@@ -22,11 +22,10 @@
                     {{ filter_form.max_amount }}
                 </div>
                 <div class="col-md-3 d-flex align-items-center">
-                    <div class="form-check">
-                        {{ filter_form.due_15_days }}
-                        <label class="form-check-label" for="{{ filter_form.due_15_days.id_for_label }}">
-                            {{ filter_form.due_15_days.label }}
-                        </label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">Due ></span>
+                        {{ filter_form.due_days }}
+                        <span class="input-group-text">Days</span>
                     </div>
                 </div>
                 <div class="col-md-1">
@@ -82,10 +81,12 @@
         <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
             <div>
                 <i class="fas fa-exclamation-triangle me-1"></i>
-                Items Sold > 15 Days Ago (Pending/Due)
+                Items Sold > {{ filter_form.due_days.value|default:15 }} Days Ago (Pending/Due)
             </div>
             <div class="text-end">
-                <div class="fw-bold">Sum > 15 Days: Rs. {{ filtered_total|floatformat:2 }}</div>
+                <div class="fw-bold">
+                    Sum > {{ filter_form.due_days.value|default:15 }} Days: Rs. {{ filtered_total|floatformat:2 }}
+                </div>
                 <div class="small fw-bold text-danger">
                     (Minus Received: Rs. {{ total_received|floatformat:2 }}) =
                     <span class="text-dark bg-white px-1 rounded">
