@@ -64,17 +64,25 @@
                     <th>Weight (kg)</th>
                     <th>Price</th>
                     <th>Total</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in items %}
-                <tr>
+                <tr {% if item.is_closed %}class="table-light text-muted" {% endif %}>
                     <td>{{ item.id }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.weight }}</td>
                     <td>Rs. {{ item.price|floatformat:2 }}</td>
                     <td>Rs. {{ item.total|floatformat:2 }}</td>
+                    <td>
+                        {% if item.is_closed %}
+                        <span class="badge bg-secondary">Closed</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Open</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{% url 'delete_item' item.pk %}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Are you sure?')">Delete</a>

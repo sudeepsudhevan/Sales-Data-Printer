@@ -26,3 +26,4 @@ class FilterForm(forms.Form):
     min_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Min Amount'}))
     max_amount = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Amount'}))
     due_days = forms.IntegerField(required=False, initial=15, label="Due Days (> X Days)", widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Days'}))
+    show_closed = forms.BooleanField(required=False, initial=False, label="Show Closed/Settled", widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))

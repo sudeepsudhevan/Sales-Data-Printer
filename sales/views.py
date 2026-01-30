@@ -10,7 +10,53 @@ import datetime
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
+def calculate_status():
+    # 1. Reset everything to False first (simplest way to ensure consistency on re-calc)
+    # Be careful with performance on large datasets, but for small scale this is fine.
+    # Ideally only re-calc from last changes, but for now full re-calc ensures correctness.
+    
+    # Get all items ordered by date
+    all_items = ItemSold.objects.all().order_by('date')
+    all_money = MoneyReceived.objects.all().order_by('date')
+    
+    total_money_received = all_money.aggregate(Sum('amount'))['amount__sum'] or 0
+    
+    # Mark Items as Closed based on Total Money
+    cumulative_sales = 0
+    closed_items_value = 0
+    
+    for item in all_items:
+        cumulative_sales += item.total
+        if cumulative_sales <= total_money_received:
+            if not item.is_closed:
+                item.is_closed = True
+                item.save()
+            closed_items_value += item.total
+        else:
+            if item.is_closed:
+                item.is_closed = False
+                item.save()
+                
+    # Mark Money as Settled based on Closed Items Value
+    # (Money is "settled" if it has been "used up" by closed items)
+    cumulative_money = 0
+    for money in all_money:
+        cumulative_money += money.amount
+        if cumulative_money <= closed_items_value:
+             if not money.is_settled:
+                money.is_settled = True
+                money.save()
+        else:
+            if money.is_settled:
+                money.is_settled = False
+                money.save()
+    
+    return closed_items_value
+
 def index(request):
+    # Recalculate status before showing dashboard
+    calculate_status()
+    
     # Filter Form
     filter_form = FilterForm(request.GET or None)
     
@@ -22,12 +68,15 @@ def index(request):
     filtered_total = 0
     filtered_balance = 0
     
+    show_closed = False
+    
     if filter_form.is_valid():
         start_date = filter_form.cleaned_data.get('start_date')
         end_date = filter_form.cleaned_data.get('end_date')
         min_amount = filter_form.cleaned_data.get('min_amount')
         max_amount = filter_form.cleaned_data.get('max_amount')
         due_days = filter_form.cleaned_data.get('due_days')
+        show_closed = filter_form.cleaned_data.get('show_closed')
         
         # Apply filters to Base QS
         if start_date:
@@ -45,11 +94,22 @@ def index(request):
             money_qs = money_qs.filter(amount__lte=max_amount)
             sold_qs = sold_qs.filter(total__lte=max_amount)
             
-        # Specific Logic for "Due > X Days" -> Filter Items Sold older than X days
+        # Specific Logic for "Items List" on Dashboard
+        # Now we use 'due_days' OR just general list view if we want.
+        # But per original logic, filtered_items was specifically for "Due > X Days".
+        # Let's keep that but respect 'show_closed'.
+        
         if due_days:
             cutoff_date = datetime.date.today() - datetime.timedelta(days=due_days)
             # If checked, we specifically want to SHOW these items in a list
+            
+            # Start with base likely filtered by date/amount
             filtered_items = sold_qs.filter(date__lte=cutoff_date).order_by('date')
+            
+            # Application of show_closed toggle
+            if not show_closed:
+                filtered_items = filtered_items.filter(is_closed=False)
+                
             filtered_total = filtered_items.aggregate(Sum('total'))['total__sum'] or 0
             
             # Calculate Total Received (for the subtraction)

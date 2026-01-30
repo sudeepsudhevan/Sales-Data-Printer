@@ -28,6 +28,13 @@
                         <span class="input-group-text">Days</span>
                     </div>
                 </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check form-switch">
+                        {{ filter_form.show_closed }}
+                        <label class="form-check-label" for="{{ filter_form.show_closed.id_for_label }}">Show Closed
+                            Items</label>
+                    </div>
+                </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary w-100">Filter</button>
                 </div>

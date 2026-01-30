@@ -52,15 +52,23 @@
                     <th>ID</th>
                     <th>Date</th>
                     <th>Money Received</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for entry in entries %}
-                <tr>
+                <tr {% if entry.is_settled %}class="table-light text-muted" {% endif %}>
                     <td>{{ entry.id }}</td>
                     <td>{{ entry.date }}</td>
                     <td>Rs. {{ entry.amount|floatformat:2 }}</td>
+                    <td>
+                        {% if entry.is_settled %}
+                        <span class="badge bg-secondary">Settled</span>
+                        {% else %}
+                        <span class="badge bg-success">Unsettled</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{% url 'delete_money' entry.pk %}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Are you sure?')">Delete</a>
