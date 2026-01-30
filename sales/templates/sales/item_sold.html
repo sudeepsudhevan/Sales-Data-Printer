@@ -55,7 +55,12 @@
                 </form>
             </div>
         </div>
-        <div class="total-box mb-3 text-info">Total Sales: Rs. {{ total_sold|floatformat:2 }}</div>
+        <div class="total-box mb-3 text-info">
+            Total Sales: Rs. {{ total_sold|floatformat:2 }}
+            {% if total_sold != open_sales %}
+            | <span class="text-danger">Unsettled Sales: Rs. {{ open_sales|floatformat:2 }}</span>
+            {% endif %}
+        </div>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>

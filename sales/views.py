@@ -190,11 +190,13 @@ def money_received(request):
             entries = entries.filter(amount__lte=max_amount)
     
     total_received = entries.aggregate(Sum('amount'))['amount__sum'] or 0
+    unsettled_money = entries.filter(is_settled=False).aggregate(Sum('amount'))['amount__sum'] or 0
     
     return render(request, 'sales/money_received.html', {
         'form': form,
         'entries': entries,
         'total_received': total_received,
+        'unsettled_money': unsettled_money,
         'filter_form': filter_form
     })
 
@@ -219,6 +221,7 @@ def item_sold(request):
         max_amount = filter_form.cleaned_data.get('max_amount')
         # We also support due_days here if user wants to see it on generic list
         due_days = filter_form.cleaned_data.get('due_days')
+        show_closed = filter_form.cleaned_data.get('show_closed') # Add checking show_closed
 
         if start_date:
             items = items.filter(date__gte=start_date)
@@ -232,13 +235,22 @@ def item_sold(request):
         if due_days:
             cutoff_date = datetime.date.today() - datetime.timedelta(days=due_days)
             items = items.filter(date__lte=cutoff_date)
+            
+        if show_closed is False: # If not explictly True (and if field exists)
+             # Actually, simpler: if not filter_form.cleaned_data.get('show_closed'):
+             pass
+             # We haven't implemented filtering logic based on show_closed in item_sold VIEW yet, 
+             # but user just asked for AMOUNT. 
+             # Let's add the Amount calculation first.
     
     total_sold = items.aggregate(Sum('total'))['total__sum'] or 0
+    open_sales = items.filter(is_closed=False).aggregate(Sum('total'))['total__sum'] or 0
     
     return render(request, 'sales/item_sold.html', {
         'form': form,
         'items': items,
         'total_sold': total_sold,
+        'open_sales': open_sales,
         'filter_form': filter_form
     })
 
