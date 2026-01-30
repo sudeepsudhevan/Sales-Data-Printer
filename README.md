@@ -10,6 +10,11 @@ A simple and efficient Django application designed to track sales data, specific
 -   **Auto-Calculation**: Automatically calculates the total value (Weight * Price) for items sold.
 -   **PDF Reports**: Generate comprehensive PDF reports including all data, using `xhtml2pdf`.
 -   **Admin Panel**: Full administrative control to view, search, edit, and delete records.
+-   **Auto-Settlement System**: Implements a First-In-First-Out (FIFO) logic where payments automatically close sales.
+    -   **Closed Status**: Items are marked "Closed" when the running total of receipts covers them.
+    -   **Settled Status**: Money entries are marked "Settled" when they have been fully utilized to close items.
+    -   **Dynamic Totals**: Displays "Open/Unsettled" balances to clearly show outstanding amounts.
+    -   **Dashboard Toggle**: Filter to show or hide closed/settled historical records.
 
 ## Tech Stack
 
