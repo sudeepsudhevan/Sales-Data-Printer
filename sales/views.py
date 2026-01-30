@@ -161,6 +161,7 @@ def index(request):
     return render(request, 'sales/index.html', context)
 
 def money_received(request):
+    calculate_status()
     if request.method == 'POST':
         form = MoneyReceivedForm(request.POST)
         if form.is_valid():
@@ -198,6 +199,7 @@ def money_received(request):
     })
 
 def item_sold(request):
+    calculate_status()
     if request.method == 'POST':
         form = ItemSoldForm(request.POST)
         if form.is_valid():
