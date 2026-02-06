@@ -5,9 +5,12 @@
     <div class="d-flex justify-content-between align-items-center mt-4">
         <h1>Dashboard</h1>
         <div>
-            <a href="{% url 'sales:backup_database' %}" class="btn btn-teal text-white shadow-sm"
+            <a href="{% url 'sales:backup_database' %}" class="btn btn-teal text-white shadow-sm me-2"
                 style="background-color: #20c997; border-color: #20c997;">
-                <i class="fas fa-database me-1"></i> Backup Database
+                <i class="fas fa-database me-1"></i> Backup
+            </a>
+            <a href="{% url 'sales:backup_list' %}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-history me-1"></i> Restore / Manage
             </a>
         </div>
     </div>

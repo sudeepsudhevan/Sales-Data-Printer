@@ -11,6 +11,8 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 import shutil
 import os
+import time
+from django.db import connections
 from django.conf import settings
 from django.contrib import messages
 
@@ -190,7 +192,7 @@ def money_received(request):
     else:
         form = MoneyReceivedForm(initial={'date': datetime.date.today()})
     
-    entries = MoneyReceived.objects.all().order_by('-date')
+    entries = MoneyReceived.objects.all().order_by('-date', '-id')
     
     # Filter
     filter_form = FilterForm(request.GET or None)
@@ -230,7 +232,7 @@ def item_sold(request):
     else:
         form = ItemSoldForm(initial={'date': datetime.date.today()})
     
-    items = ItemSold.objects.all().order_by('-date')
+    items = ItemSold.objects.all().order_by('-date', 'id')
     
     # Filter
     filter_form = FilterForm(request.GET or None)
@@ -336,4 +338,60 @@ def backup_database(request):
         # messages.error(request, f"Backup failed: {str(e)}")
         print(f"Backup Error: {e}")
         
-    return redirect(request.META.get('HTTP_REFERER', 'index'))
+    return redirect(request.META.get('HTTP_REFERER', 'sales:index'))
+
+def backup_list(request):
+    backup_dir = os.path.join(settings.BASE_DIR, 'backup')
+    backups = []
+    if os.path.exists(backup_dir):
+        for f in os.listdir(backup_dir):
+            if f.endswith('.sqlite3'):
+                path = os.path.join(backup_dir, f)
+                size = os.path.getsize(path) / 1024 # KB
+                mtime = os.path.getmtime(path)
+                backups.append({
+                    'filename': f,
+                    'size': f"{size:.2f} KB",
+                    'date': datetime.datetime.fromtimestamp(mtime)
+                })
+    
+    # Sort by date descending (newest first)
+    backups.sort(key=lambda x: x['date'], reverse=True)
+    
+    return render(request, 'sales/backup_list.html', {'backups': backups})
+
+def restore_backup(request, filename):
+    if request.method != 'POST':
+        # Safety check: Only allow POST for restore actions
+        return redirect('sales:backup_list')
+        
+    try:
+        source_path = os.path.join(settings.BASE_DIR, 'backup', filename)
+        dest_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+        
+        if not os.path.exists(source_path):
+            # messages.error(request, 'Backup file not found')
+            return redirect('sales:backup_list')
+            
+        # 1. SAFETY BACKUP of current state
+        if os.path.exists(dest_path):
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            safety_filename = f"SAFETY_BACKUP_BEFORE_RESTORE_{timestamp}.sqlite3"
+            safety_path = os.path.join(settings.BASE_DIR, 'backup', safety_filename)
+            shutil.copy2(dest_path, safety_path)
+            print(f"Safety backup created: {safety_filename}")
+            
+        # 2. Close connections to release lock
+        connections.close_all()
+        
+        # 3. Restore
+        shutil.copy2(source_path, dest_path)
+        print(f"Restored from: {filename}")
+        
+        # messages.success(request, 'Database restored successfully.')
+        
+    except Exception as e:
+        print(f"Restore Failed: {e}")
+        # messages.error(request, f"Restore failed: {e}")
+        
+    return redirect('sales:index')

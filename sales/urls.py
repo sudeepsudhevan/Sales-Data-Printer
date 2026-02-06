@@ -11,4 +11,6 @@ urlpatterns = [
     path('delete-item/<int:pk>/', views.delete_item, name='delete_item'),
     path('pdf-report/', views.pdf_report, name='pdf_report'),
     path('backup/', views.backup_database, name='backup_database'),
+    path('backups/', views.backup_list, name='backup_list'),
+    path('restore/<str:filename>/', views.restore_backup, name='restore_backup'),
 ]
