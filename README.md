@@ -14,7 +14,10 @@ A simple and efficient Django application designed to track sales data, specific
     -   **Closed Status**: Items are marked "Closed" when the running total of receipts covers them.
     -   **Settled Status**: Money entries are marked "Settled" when they have been fully utilized to close items.
     -   **Dynamic Totals**: Displays "Open/Unsettled" balances to clearly show outstanding amounts.
-    -   **Dashboard Toggle**: Filter to show or hide closed/settled historical records.
+    -   **Detailed Reporting**: Toggle between viewing all records or only "open" sales.
+20: -   **Database Management**:
+21:     -   **Backup**: One-click "Quick Backup" creates a timestamped snapshot of your data.
+22:     -   **Restore**: Manage and restore previous backups. Includes a **Safety First** mechanism that automatically backs up your *current* data before any restore operation, preventing accidental data loss.
 
 ## Tech Stack
 
