@@ -55,7 +55,7 @@ def calculate_status():
 
 def index(request):
     # Recalculate status before showing dashboard
-    calculate_status()
+    closed_items_val = calculate_status()
     
     # Filter Form
     filter_form = FilterForm(request.GET or None)
@@ -67,6 +67,7 @@ def index(request):
     filtered_items = None
     filtered_total = 0
     filtered_balance = 0
+    unused_money = 0 # Initialize unused_money
     
     show_closed = False
     
@@ -112,10 +113,24 @@ def index(request):
                 
             filtered_total = filtered_items.aggregate(Sum('total'))['total__sum'] or 0
             
-            # Calculate Total Received (for the subtraction)
-            # We use money_qs which might be filtered by other fields if specified, or is all money
-            current_total_received = money_qs.aggregate(Sum('amount'))['amount__sum'] or 0
-            filtered_balance = filtered_total - current_total_received
+            # For Net Due Calculation: ALWAYS use Open Items sum, regardless of what we show/hide.
+            # We want "Net Due" to represent what is truly outstanding.
+            outstanding_items_qs = sold_qs.filter(date__lte=cutoff_date, is_closed=False)
+            outstanding_items_total = outstanding_items_qs.aggregate(Sum('total'))['total__sum'] or 0
+            
+            # Calculate Total Received (Global) to determine Unused Money
+            # Unused Money = Global Money - Value of Closed Items
+            # This represents the "Advance/Balance" available to pay off these open items.
+            global_total_received = MoneyReceived.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+            
+            # We need the value of closed items. calculate_status returns it.
+            
+            unused_money = global_total_received - closed_items_val
+            
+            # NET DUE = Outstanding Open Items - Unused Money
+            filtered_balance = outstanding_items_total - unused_money
+
+
             
     # Summary Cards (Filtered)
     total_received = money_qs.aggregate(Sum('amount'))['amount__sum'] or 0
@@ -157,6 +172,7 @@ def index(request):
         'filtered_items': filtered_items, # Pass the list if "Due" was checked
         'filtered_total': filtered_total,
         'filtered_balance': filtered_balance,
+        'unused_money': unused_money,
     }
     return render(request, 'sales/index.html', context)
 

@@ -95,7 +95,7 @@
                     Sum > {{ filter_form.due_days.value|default:15 }} Days: Rs. {{ filtered_total|floatformat:2 }}
                 </div>
                 <div class="small fw-bold text-danger">
-                    (Minus Received: Rs. {{ total_received|floatformat:2 }}) =
+                    (Minus Unused/Advance: Rs. {{ unused_money|floatformat:2 }}) =
                     <span class="text-dark bg-white px-1 rounded">
                         Net Due: Rs. {{ filtered_balance|floatformat:2 }}</span>
                 </div>
