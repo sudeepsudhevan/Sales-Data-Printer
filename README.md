@@ -48,10 +48,6 @@ A simple and efficient Django application designed to track sales data, specific
 
 Visit `http://127.0.0.1:8000/` to access the application.
 
-Visit `http://127.0.0.1:8000/` to access the application.
-
-## How to Test & Use Features
-
 ## How to Test & Use Features
 
 ### 1. Advanced Verification: "Net Due" Calculation Logic
