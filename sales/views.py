@@ -9,6 +9,10 @@ import datetime
 
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+import shutil
+import os
+from django.conf import settings
+from django.contrib import messages
 
 def calculate_status():
     # 1. Reset everything to False first (simplest way to ensure consistency on re-calc)
@@ -305,3 +309,31 @@ def pdf_report(request):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html_string + '</pre>')
     return response
+
+def backup_database(request):
+    try:
+        # Source path
+        db_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+        
+        # Backup directory
+        backup_dir = os.path.join(settings.BASE_DIR, 'backup')
+        if not os.path.exists(backup_dir):
+            os.makedirs(backup_dir)
+            
+        # Timestamped filename
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        backup_filename = f"db_backup_{timestamp}.sqlite3"
+        backup_path = os.path.join(backup_dir, backup_filename)
+        
+        if os.path.exists(db_path):
+            shutil.copy2(db_path, backup_path)
+            # messages.success(request, f"Database backed up: {backup_filename}")
+        else:
+            # messages.error(request, "Database file not found!")
+            pass
+            
+    except Exception as e:
+        # messages.error(request, f"Backup failed: {str(e)}")
+        print(f"Backup Error: {e}")
+        
+    return redirect(request.META.get('HTTP_REFERER', 'index'))

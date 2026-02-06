@@ -2,7 +2,15 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1 class="mt-4">Dashboard</h1>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <h1>Dashboard</h1>
+        <div>
+            <a href="{% url 'sales:backup_database' %}" class="btn btn-teal text-white shadow-sm"
+                style="background-color: #20c997; border-color: #20c997;">
+                <i class="fas fa-database me-1"></i> Backup Database
+            </a>
+        </div>
+    </div>
     <p class="lead text-muted">Sales and Money Received Overview</p>
 
     <!-- Filters -->
@@ -51,7 +59,7 @@
                     <h2 class="card-text">Rs. {{ total_received|floatformat:2 }}</h2>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{% url 'money_received' %}" class="text-white stretched-link">View Details</a>
+                    <a href="{% url 'sales:money_received' %}" class="text-white stretched-link">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -63,7 +71,7 @@
                     <h2 class="card-text">Rs. {{ total_sold|floatformat:2 }}</h2>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{% url 'item_sold' %}" class="text-white stretched-link">View Details</a>
+                    <a href="{% url 'sales:item_sold' %}" class="text-white stretched-link">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

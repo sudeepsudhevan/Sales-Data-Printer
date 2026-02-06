@@ -13,13 +13,13 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light rounded shadow-sm px-3">
-            <a class="navbar-brand" href="{% url 'index' %}">Sales Printer</a>
+            <a class="navbar-brand" href="{% url 'sales:index' %}">Sales Printer</a>
             <div class="navbar-nav me-auto">
-                <a class="nav-item nav-link" href="{% url 'money_received' %}">Money Received</a>
-                <a class="nav-item nav-link" href="{% url 'item_sold' %}">Item Sold</a>
+                <a class="nav-item nav-link" href="{% url 'sales:money_received' %}">Money Received</a>
+                <a class="nav-item nav-link" href="{% url 'sales:item_sold' %}">Item Sold</a>
             </div>
             <div class="navbar-nav">
-                <a class="btn btn-primary" href="{% url 'pdf_report' %}" target="_blank">Print Full PDF</a>
+                <a class="btn btn-primary" href="{% url 'sales:pdf_report' %}" target="_blank">Print Full PDF</a>
             </div>
         </nav>
 
