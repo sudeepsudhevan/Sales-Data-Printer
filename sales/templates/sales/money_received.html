@@ -75,7 +75,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'delete_money' entry.pk %}" class="btn btn-sm btn-danger"
+                        <a href="{% url 'sales:delete_money' entry.pk %}" class="btn btn-sm btn-danger"
                             onclick="return confirm('Are you sure?')">Delete</a>
                     </td>
                 </tr>
