@@ -188,7 +188,7 @@ def money_received(request):
         form = MoneyReceivedForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('money_received')
+            return redirect('sales:money_received')
     else:
         form = MoneyReceivedForm(initial={'date': datetime.date.today()})
     
@@ -228,7 +228,7 @@ def item_sold(request):
         form = ItemSoldForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('item_sold')
+            return redirect('sales:item_sold')
     else:
         form = ItemSoldForm(initial={'date': datetime.date.today()})
     
@@ -279,12 +279,12 @@ def item_sold(request):
 def delete_money(request, pk):
     entry = get_object_or_404(MoneyReceived, pk=pk)
     entry.delete()
-    return redirect('money_received')
+    return redirect('sales:money_received')
 
 def delete_item(request, pk):
     item = get_object_or_404(ItemSold, pk=pk)
     item.delete()
-    return redirect('item_sold')
+    return redirect('sales:item_sold')
 
 def pdf_report(request):
     money_entries = MoneyReceived.objects.all().order_by('date')
