@@ -5,6 +5,7 @@ A simple and efficient Django application designed to track sales data, specific
 ## Features
 
 -   **Dashboard**: Easy navigation between different modules.
+-   **Live Market Price**: Automatically extracts and displays the daily rubber market price in the header. The extraction runs seamlessly within Django on the first page load each day, keeping data up-to-date without external cron jobs.
 -   **Money Received**: Track incoming payments with date and amount.
 -   **Items Sold**: Record sales with weight and price per unit details.
 -   **Auto-Calculation**: Automatically calculates the total value (Weight * Price) for items sold.
