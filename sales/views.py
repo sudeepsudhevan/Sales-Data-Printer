@@ -395,3 +395,24 @@ def restore_backup(request, filename):
         # messages.error(request, f"Restore failed: {e}")
         
     return redirect('sales:index')
+
+def price_history(request):
+    """
+    Renders the history of daily scraped prices from daily_prices.json.
+    """
+    filepath = os.path.join(settings.BASE_DIR, 'daily_prices.json')
+    daily_data = []
+    
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, 'r') as f:
+                daily_data = json.load(f)
+                if not isinstance(daily_data, list):
+                    daily_data = []
+                else:
+                    # Reverse so the newest is at the top
+                    daily_data.reverse()
+        except (json.JSONDecodeError, IOError):
+            pass
+            
+    return render(request, 'sales/price_history.html', {'daily_prices': daily_data})

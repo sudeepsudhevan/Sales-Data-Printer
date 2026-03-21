@@ -13,4 +13,5 @@ urlpatterns = [
     path('backup/', views.backup_database, name='backup_database'),
     path('backups/', views.backup_list, name='backup_list'),
     path('restore/<str:filename>/', views.restore_backup, name='restore_backup'),
+    path('price-history/', views.price_history, name='price_history'),
 ]
