@@ -21,6 +21,15 @@
             <div class="navbar-nav">
                 <a class="btn btn-primary" href="{% url 'sales:pdf_report' %}" target="_blank">Print Full PDF</a>
             </div>
+            {% if latest_price_entry %}
+            <div class="navbar-nav ms-3 border-start ps-3 d-flex align-items-center">
+                <div class="text-secondary small me-2 text-end">
+                    <span class="d-block fw-bold text-dark">₹{{ latest_price_entry.price }}</span>
+                    <span class="d-block" style="font-size: 0.75rem;">{{ latest_price_entry.date }}</span>
+                </div>
+                <span class="badge bg-success">Live Price</span>
+            </div>
+            {% endif %}
         </nav>
 
         {% block content %}{% endblock %}
