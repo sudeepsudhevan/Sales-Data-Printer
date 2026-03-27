@@ -25,17 +25,64 @@
             {% if latest_price_entry %}
             <div class="navbar-nav ms-3 border-start ps-3 d-flex align-items-center">
                 <div class="text-secondary small me-2 text-end">
-                    <span class="d-block fw-bold text-dark">₹{{ latest_price_entry.price }}</span>
+                    <span id="priceSpan" class="d-block fw-bold text-dark" style="cursor: pointer;"
+                        title="Click to copy price">₹{{ latest_price_entry.price }}</span>
                     <span class="d-block" style="font-size: 0.75rem;">{{ latest_price_entry.date }}</span>
                 </div>
-                <span class="badge bg-success">Live Price</span>
+                <a href="https://rubberboard.gov.in/public" style="cursor: pointer;" target="_blank">
+                    <span class="badge bg-success">Live Price</span>
+                </a>
             </div>
             {% endif %}
         </nav>
 
         {% block content %}{% endblock %}
     </div>
+
+    <!-- Toast Container for Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="feedbackToast" class="toast align-items-center text-bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const priceSpan = document.getElementById('priceSpan');
+            const toastEl = document.getElementById('feedbackToast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            if (priceSpan && toastEl) {
+                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                priceSpan.addEventListener('click', () => {
+                    // Get the text content of the span
+                    const priceText = priceSpan.textContent.replace(/\₹/g, '').trim();
+
+                    // Use the modern Clipboard API
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(priceText)
+                            .then(() => {
+                                toastEl.classList.remove('text-bg-danger');
+                                toastEl.classList.add('text-bg-success');
+                                toastMessage.textContent = `Copied ₹${priceText} to clipboard!`;
+                                toast.show();
+                            })
+                            .catch(err => {
+                                toastEl.classList.remove('text-bg-success');
+                                toastEl.classList.add('text-bg-danger');
+                                toastMessage.textContent = `Failed to copy: ${err}`;
+                                toast.show();
+                            });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
